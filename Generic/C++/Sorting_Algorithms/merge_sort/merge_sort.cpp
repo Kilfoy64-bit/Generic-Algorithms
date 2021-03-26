@@ -10,14 +10,14 @@ Description of Merge Sort:
 
 MergeSort(arr[], l,  r)
 If r > l
-     1. Find the middle point to divide the array into two halves:  
-             middle m = l+ (r-l)/2
-     2. Call mergeSort for first half:   
-             Call mergeSort(arr, l, m)
-     3. Call mergeSort for second half:
-             Call mergeSort(arr, m+1, r)
-     4. Merge the two halves sorted in step 2 and 3:
-             Call merge(arr, l, m, r)
+	1. Find the middle point to divide the array into two halves:  
+			middle m = l+ (r-l)/2
+	2. Call mergeSort for first half:   
+			Call mergeSort(arr, l, m)
+	3. Call mergeSort for second half:
+			Call mergeSort(arr, m+1, r)
+	4. Merge the two halves sorted in step 2 and 3:
+			Call merge(arr, l, m, r)
 
 Time Complexity: Sorting arrays on different machines. Merge Sort is a recursive algorithm and time complexity can be expressed as following recurrence relation. 
 T(n) = 2T(n/2) + θ(n)
@@ -40,8 +40,8 @@ std::string get_args(int argc, char *argv[]);
 void read_file_array(std::string filename, std::vector<int> &array);
 void convert_str_to_vec(std::vector<int> &array, std::string str, std::string delimiter=",");
 std::vector<int> merge_sort(std::vector<int> array);
-std::vector<int> merge(int left, int right);
-std::vector<int> slice_vector(std::vector<int> &arr, int first, int last)
+std::vector<int> merge(std::vector<int> left, std::vector<int> right);
+std::vector<int> slice_vector(std::vector<int> &arr, int first, int last);
 void print_vector(std::vector<int> array);
 
 int main(int argc, char *argv[]) {
@@ -53,9 +53,11 @@ int main(int argc, char *argv[]) {
 	filename = get_args(argc, argv);
 	read_file_array(filename, array);
 	
+	print_vector(array);
+	
     start = std::clock();
 
-	merge_sort(array);
+	array = merge_sort(array);
 	
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
@@ -79,7 +81,6 @@ void read_file_array(std::string filename, std::vector<int> &array) {
 	std::string str_array;
 
 	while(std::getline(file, line)) {
-		std::cout << line << std::endl;
 		str_array += line;
 	}
 
@@ -92,7 +93,6 @@ void convert_str_to_vec(std::vector<int> &array, std::string str, std::string de
 	size_t pos = 0;
     while ((pos = str.find(delimiter)) != std::string::npos) {
 		token = std::stoi(str.substr(0, pos));
-		std::cout << token << std::endl;
 		array.push_back(token);
 		str.erase(0, pos + delimiter.length());
 	}
@@ -103,17 +103,31 @@ std::vector<int> merge_sort(std::vector<int> array) {
 		return array;
 	}
 
-	// std::vector<int> left = 
-	// std::vector<int> right
+	int middle_index = (array.size()/2) - 1;
+
+	std::vector<int> left = merge_sort(slice_vector(array, 0, middle_index));
+	std::vector<int> right = merge_sort(slice_vector(array, (middle_index + 1), (array.size()-1)));
+
+	return merge(left, right);
 }
 
-std::vector<int> merge(int left, int right) {
-	
+std::vector<int> merge(std::vector<int> left, std::vector<int> right) {
+	std::vector<int> combined;
+
+	int i, j = 0;
+	for (int k = 0; k < (left.size() + right.size()); k++) {
+		if ((j >= right.size()) | ((i < left.size()) && (left[i] < right[j]))) {
+			combined.push_back(left[i]);
+			i++;
+		} else {
+			combined.push_back(right[j]);
+			j++;
+		}
+	}
+	return combined;
 }
 
 std::vector<int> slice_vector(std::vector<int> &arr, int first, int last) {
-	std::vector<int> result;
-
     auto start = arr.begin() + first;
     auto end = arr.begin() + last + 1;
   

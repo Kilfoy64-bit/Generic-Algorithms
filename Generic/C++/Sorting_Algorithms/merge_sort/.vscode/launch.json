@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-			"args": ["C:\\Users\\logan\\source\\repos\\Generic\\C++\\Sorting_Algorithms\\inputs\\unsorted_array01.txt"],
+			"args": ["C:\\Users\\logan\\Documents\\GitHub\\Generic-Algorithms\\Generic\\C++\\Sorting_Algorithms\\inputs\\unsorted_array01.txt"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
